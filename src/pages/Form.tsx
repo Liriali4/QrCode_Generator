@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import {
     Box, Input, Button, Flex, FormControl, FormLabel, Modal,
-    ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure
+    ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure,
+    Heading
 } from '@chakra-ui/react';
 import QRCode from 'qrcode.react';
 import { DataType } from '../types/types';
@@ -46,11 +47,14 @@ export default function Form(): JSX.Element {
             display="flex"
             alignItems="center"
             justifyContent="center"
+            flexDir={'column'}
             height="100vh"
             bg="gray.50"
+            gap={10}
             p={5}
             position="relative"
         >
+            <Heading>QR Code Generator</Heading>
             <Box
                 p={5}
                 maxW="500px"
