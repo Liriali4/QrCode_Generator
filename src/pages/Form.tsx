@@ -7,6 +7,7 @@ import {
 import QRCode from 'qrcode.react';
 import { DataType } from '../types/types';
 import { addDataRepository } from '../repository';
+import ImagePreview from './ImagePreview';
 
 export default function Form(): JSX.Element {
 
@@ -31,7 +32,7 @@ export default function Form(): JSX.Element {
         try {
             const id = await addDataRepository(data);
             if (id) {
-                const qrDataUrl = `http://localhost:3000/details?id=${id}`;
+                const qrDataUrl = `http://192.168.3.124:3000/details?id=${id}`;
                 setQrData(qrDataUrl);
                 setLoading(false);
                 onOpen();
@@ -65,6 +66,23 @@ export default function Form(): JSX.Element {
                 bg="white"
                 mr={5}
             >
+
+                <Flex align={'center'} justify={'center'}>
+                    <ImagePreview
+                        onSelectedFile={function (file: File | undefined): void {
+                            throw new Error('Function not implemented.');
+                        }}
+                        imagePreview={''}
+                        onSelectedImagePreview={function (fileString: string): void {
+                            throw new Error('Function not implemented.');
+                        }}
+                        loading={false}
+                        setLoading={function (loading: boolean): void {
+                            throw new Error('Function not implemented.');
+                        }}
+                    />
+                </Flex>
+
                 <FormControl id="name" mb={4}>
                     <FormLabel>Nome</FormLabel>
                     <Input
@@ -111,11 +129,11 @@ export default function Form(): JSX.Element {
             </Box>
 
             {qrData && (
-                <Button 
-                    colorScheme="blue" 
-                    onClick={onOpen} 
-                    position="absolute" 
-                    top="50px" 
+                <Button
+                    colorScheme="blue"
+                    onClick={onOpen}
+                    position="absolute"
+                    top="50px"
                     right="100pt"
                 >
                     Rever QR Code
