@@ -1,21 +1,24 @@
 import { useState } from 'react';
-import { Box, Input, Button, Flex } from "@chakra-ui/react";
 import {
-    FormControl,
-    FormLabel,
+    Box, Input, Button, Flex, FormControl, FormLabel, Modal,
+    ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure
 } from '@chakra-ui/react';
 import QRCode from 'qrcode.react';
 import { DataType } from '../types/types';
 import { addDataRepository } from '../repository';
 
 export default function Form(): JSX.Element {
+
+    const { isOpen, onOpen, onClose } = useDisclosure();
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [address, setAddress] = useState('');
     const [qrData, setQrData] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const handleGenerateQRCode = async () => {
+        setLoading(true)
         const data: DataType = {
             id: '',
             name,
@@ -29,12 +32,14 @@ export default function Form(): JSX.Element {
             if (id) {
                 const qrDataUrl = `http://localhost:3000/details?id=${id}`;
                 setQrData(qrDataUrl);
+                setLoading(false)
+                onOpen();
             }
         } catch (error) {
             console.error("Erro ao adicionar dados:", error);
+            setLoading(false)
         }
     };
-
 
     return (
         <Flex
@@ -96,22 +101,26 @@ export default function Form(): JSX.Element {
                     />
                 </FormControl>
 
-                <Button colorScheme="teal" onClick={handleGenerateQRCode} width="full" mb={4}>
+                <Button isLoading={loading} colorScheme="teal" onClick={handleGenerateQRCode} width="full" mb={4}>
                     Gerar QR Code
                 </Button>
             </Box>
 
-            {qrData && (
-                <Box
-                    p={5}
-                    borderWidth={1}
-                    borderRadius="lg"
-                    boxShadow="lg"
-                    bg="white"
-                >
-                    <QRCode value={qrData} size={256} />
-                </Box>
-            )}
+            <Modal isOpen={isOpen} onClose={onClose} size="full">
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>Seu QR Code</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody display="flex" alignItems="center" justifyContent="center">
+                        {qrData && <QRCode value={qrData} size={256} />}
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button colorScheme="blue" mr={3} onClick={onClose}>
+                            Fechar
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
         </Flex>
     );
 }
