@@ -18,7 +18,7 @@ export default function Form(): JSX.Element {
     const [loading, setLoading] = useState<boolean>(false);
 
     const handleGenerateQRCode = async () => {
-        setLoading(true)
+        setLoading(true);
         const data: DataType = {
             id: '',
             name,
@@ -32,12 +32,12 @@ export default function Form(): JSX.Element {
             if (id) {
                 const qrDataUrl = `http://localhost:3000/details?id=${id}`;
                 setQrData(qrDataUrl);
-                setLoading(false)
+                setLoading(false);
                 onOpen();
             }
         } catch (error) {
             console.error("Erro ao adicionar dados:", error);
-            setLoading(false)
+            setLoading(false);
         }
     };
 
@@ -48,8 +48,8 @@ export default function Form(): JSX.Element {
             justifyContent="center"
             height="100vh"
             bg="gray.50"
-            gap={20}
             p={5}
+            position="relative"
         >
             <Box
                 p={5}
@@ -105,6 +105,18 @@ export default function Form(): JSX.Element {
                     Gerar QR Code
                 </Button>
             </Box>
+
+            {qrData && (
+                <Button 
+                    colorScheme="blue" 
+                    onClick={onOpen} 
+                    position="absolute" 
+                    top="50px" 
+                    right="100pt"
+                >
+                    Rever QR Code
+                </Button>
+            )}
 
             <Modal isOpen={isOpen} onClose={onClose} size="full">
                 <ModalOverlay />
