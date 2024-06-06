@@ -5,6 +5,8 @@ import {
     FormLabel,
 } from '@chakra-ui/react';
 import QRCode from 'qrcode.react';
+import { DataType } from '../types/types';
+import { addDataRepository } from '../repository';
 
 export default function Form(): JSX.Element {
     const [name, setName] = useState('');
@@ -13,15 +15,24 @@ export default function Form(): JSX.Element {
     const [address, setAddress] = useState('');
     const [qrData, setQrData] = useState<string | null>(null);
 
-    
-    const handleGenerateQRCode = () => {
-        const data = {
+    const handleGenerateQRCode = async () => {
+        const data: DataType = {
+            id: '',
             name,
             email,
             phone,
             address,
         };
-        setQrData(JSON.stringify(data));
+
+        try {
+            const id = await addDataRepository(data);
+            if (id) {
+                const qrDataUrl = `http://localhost:3000/details?id=${id}`;
+                setQrData(qrDataUrl);
+            }
+        } catch (error) {
+            console.error("Erro ao adicionar dados:", error);
+        }
     };
 
 
@@ -98,7 +109,7 @@ export default function Form(): JSX.Element {
                     boxShadow="lg"
                     bg="white"
                 >
-                    <QRCode value={`http://localhost:3000/details?data=${encodeURIComponent(qrData)}`} size={256} />
+                    <QRCode value={qrData} size={256} />
                 </Box>
             )}
         </Flex>

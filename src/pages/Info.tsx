@@ -1,10 +1,8 @@
 import { Box, Text, } from '@chakra-ui/react';
+import { DataType } from '../types/types';
 
 interface InfoProps {
-    name: string,
-    email: string,
-    phone: string,
-    address: string
+    data: DataType
 }
 
 export default function Info(props: InfoProps): JSX.Element {
@@ -22,22 +20,22 @@ export default function Info(props: InfoProps): JSX.Element {
             >
                 <Box my={'20px'}>
                     <Text fontSize={'14pt'} fontWeight={500}>Nome:</Text>
-                    <Text>{props.name}</Text>
+                    <Text>{props.data.name}</Text>
                 </Box>
 
                 <Box my={'20px'}>
                     <Text fontSize={'14pt'} fontWeight={500}>Email:</Text>
-                    <Text>{props.email}</Text>
+                    <Text>{props.data.email}</Text>
                 </Box>
 
                 <Box my={'20px'}>
                     <Text fontSize={'14pt'} fontWeight={500}>Telefone:</Text>
-                    <Text>{props.phone}</Text>
+                    <Text>{props.data.phone}</Text>
                 </Box>
 
                 <Box my={'20px'}>
                     <Text fontSize={'14pt'} fontWeight={500}>Endereço:</Text>
-                    <Text>{props.address}</Text>
+                    <Text>{props.data.address}</Text>
                 </Box>
             </Box>
     );
