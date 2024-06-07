@@ -18,30 +18,39 @@ export default function Form(): JSX.Element {
     const [address, setAddress] = useState('');
     const [qrData, setQrData] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
+    const [loadingPhoto, setLoadingPhoto] = useState<boolean>(false);
+    const [imagePreview, setImagePreview] = useState<string>('');
+    const [imageFile, setImageFile] = useState<File | undefined>(undefined);
 
     const handleGenerateQRCode = async () => {
         setLoading(true);
-        const data: DataType = {
-            id: '',
-            name,
-            email,
-            phone,
-            address,
-        };
-
+        const data: DataType = { id: '', name, email, image: '', phone, address, };
         try {
-            const id = await addDataRepository(data);
-            if (id) {
-                const qrDataUrl = `http://192.168.3.124:3000/details?id=${id}`;
-                setQrData(qrDataUrl);
-                setLoading(false);
-                onOpen();
+            if (imageFile) {
+                const id = await addDataRepository(imageFile, data);
+                if (id) {
+                    const qrDataUrl = `http://192.168.3.124:3000/details?id=${id}`;
+                    setQrData(qrDataUrl);
+                    setLoading(false);
+                    onOpen();
+                }
             }
         } catch (error) {
             console.error("Erro ao adicionar dados:", error);
             setLoading(false);
         }
     };
+
+    function onSelectedImage(img: string) {
+        setImagePreview(img)
+    }
+
+    function onSelectedFile(file: File | undefined) {
+        setImageFile(file)
+    }
+    function onSetLoadingPhoto(status: boolean) {
+        setLoadingPhoto(status)
+    }
 
     return (
         <Flex
@@ -69,17 +78,11 @@ export default function Form(): JSX.Element {
 
                 <Flex align={'center'} justify={'center'}>
                     <ImagePreview
-                        onSelectedFile={function (file: File | undefined): void {
-                            throw new Error('Function not implemented.');
-                        }}
-                        imagePreview={''}
-                        onSelectedImagePreview={function (fileString: string): void {
-                            throw new Error('Function not implemented.');
-                        }}
-                        loading={false}
-                        setLoading={function (loading: boolean): void {
-                            throw new Error('Function not implemented.');
-                        }}
+                        onSelectedFile={onSelectedFile}
+                        imagePreview={imagePreview}
+                        onSelectedImagePreview={onSelectedImage}
+                        loading={loadingPhoto}
+                        setLoading={onSetLoadingPhoto}
                     />
                 </Flex>
 

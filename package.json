@@ -28,9 +28,13 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "tsc && react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "er": "firebase projects:list",
+    "fblogin": "firebase login",
+    "fbinit": "firebase init",
+    "deploy": "yarn build && firebase deploy"
   },
   "eslintConfig": {
     "extends": [
