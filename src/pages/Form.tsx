@@ -22,6 +22,28 @@ export default function Form(): JSX.Element {
     const [imagePreview, setImagePreview] = useState<string>('');
     const [imageFile, setImageFile] = useState<File | undefined>(undefined);
 
+
+    const generateVCard = (name: string, email: string, phone: string, address: string, imageBase64?: string) => {
+
+        let vCard = `BEGIN:VCARD
+        VERSION:3.0
+        FN:${name}
+        EMAIL:${email}
+        TEL:${phone}
+        ADR:${address}`;
+
+        if (imageBase64) {
+            vCard += `
+        PHOTO;TYPE=JPEG;ENCODING=b:${imageBase64}`;
+        }
+
+        vCard += `
+        END:VCARD`;
+
+        return vCard;
+
+    };
+
     const handleGenerateQRCode = async () => {
         setLoading(true);
         const data: DataType = { id: '', name, email, image: '', phone, address, };
@@ -29,14 +51,16 @@ export default function Form(): JSX.Element {
             if (imageFile) {
                 const id = await addDataRepository(imageFile, data);
                 if (id) {
-                    const qrDataUrl = `http://192.168.3.124:3000/details?id=${id}`;
-                    setQrData(qrDataUrl);
+                    /*  const qrDataUrl = `http://192.168.3.124:3000/details?id=${id}`;
+                     setQrData(qrDataUrl); */
+                    const vCard = generateVCard(name, email, phone, address, imagePreview);
+                    setQrData(vCard);
                     setLoading(false);
                     onOpen();
                 }
-                }else{
-                    console.log('não tem imagem', imageFile)
-                }
+            } else {
+                console.log('não tem imagem', imageFile)
+            }
             setLoading(false);
         } catch (error) {
             console.error("Erro ao adicionar dados:", error);
