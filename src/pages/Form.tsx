@@ -34,7 +34,10 @@ export default function Form(): JSX.Element {
                     setLoading(false);
                     onOpen();
                 }
-            }
+                }else{
+                    console.log('não tem imagem', imageFile)
+                }
+            setLoading(false);
         } catch (error) {
             console.error("Erro ao adicionar dados:", error);
             setLoading(false);

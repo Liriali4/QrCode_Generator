@@ -25,7 +25,6 @@ function ImagePreview(props: ImagePreview) {
 
 	const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
 
-
 	function onChangeImage(e: React.ChangeEvent<HTMLInputElement>) {
 
 		const reader = new FileReader();
@@ -35,16 +34,18 @@ function ImagePreview(props: ImagePreview) {
 
 		if (file) {
 			setLoading(true)
-			ImageCompression({ file }).then((result) => {
+		/* 	ImageCompression({ file }).then((result) => {
 				const newCompressedFile = result.compressedFile;
-				onSelectedFile(newCompressedFile);
+				console.log('IP', newCompressedFile)
+				
+
+			}); */
+			onSelectedFile(file);
 				setLoading(false)
 				reader.onload = (e: ProgressEvent<FileReader>) => {
 					onSelectedImagePreview(e.target?.result as string);
 				};
 				reader.readAsDataURL(f[0]);
-
-			});
 
 		}
 

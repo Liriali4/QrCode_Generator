@@ -4,7 +4,9 @@ import { DataType } from "../types/types";
 export async function addDataRepository(image: File, data: DataType): Promise<string> {
     return new Promise((resolve, reject) => {
 
-        if (data.name.trim() === "") {
+        if (image === undefined) {
+			resolve("Introduza uma imagem")
+		} else if (data.name.trim() === "") {
             resolve("Introduza o seu nome")
         } else if (data.email.trim() === "") {
             resolve("Introduza o seu email")
